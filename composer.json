@@ -25,7 +25,8 @@
     "license" : "MIT",
     "name" : "webservco/form",
     "require": {
-        "php" : "^8.2"
+        "php" : "^8.2",
+        "webservco/http": "^0"
     },
     "require-dev": {
         "pds/skeleton": "^1",
