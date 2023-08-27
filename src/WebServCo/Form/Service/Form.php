@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service;
 
+use Fig\Http\Message\StatusCodeInterface;
 use OutOfBoundsException;
 use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
@@ -39,6 +40,21 @@ final class Form implements FormInterface
         }
 
         throw new OutOfBoundsException('Requested field is not defined.');
+    }
+
+    public function getResponseStatusCode(): int
+    {
+        if ($this->isSent()) {
+            if (!$this->isValid()) {
+                return StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY;
+            }
+
+            // Form is sent and valid; should not arrive here.
+            throw new UnexpectedValueException('Unhandled situation.');
+        }
+
+        // Form note sent.
+        return StatusCodeInterface::STATUS_OK;
     }
 
     public function handleRequest(ServerRequestInterface $request): bool
