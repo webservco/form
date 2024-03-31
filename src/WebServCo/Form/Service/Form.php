@@ -53,7 +53,7 @@ final class Form implements FormInterface
             throw new UnexpectedValueException('Unhandled situation.');
         }
 
-        // Form note sent.
+        // Form is not sent.
         return StatusCodeInterface::STATUS_OK;
     }
 
