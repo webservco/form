@@ -6,18 +6,13 @@ namespace WebServCo\Form\Service;
 
 use Fig\Http\Message\StatusCodeInterface;
 use OutOfBoundsException;
-use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormInterface;
-use WebServCo\Http\Contract\Message\Request\Method\RequestMethodServiceInterface;
 
-use function array_key_exists;
-use function is_array;
-
-final class Form implements FormInterface
+abstract class AbstractForm implements FormInterface
 {
-    private bool $isSent = false;
+    protected bool $isSent = false;
 
     // Innocent until proven guilty.
     private bool $isValid = true;
@@ -42,6 +37,14 @@ final class Form implements FormInterface
         throw new OutOfBoundsException('Requested field is not defined.');
     }
 
+    /**
+     * @return array<int,\WebServCo\Form\Contract\FormFieldInterface>
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
     public function getResponseStatusCode(): int
     {
         if ($this->isSent()) {
@@ -57,35 +60,6 @@ final class Form implements FormInterface
         return StatusCodeInterface::STATUS_OK;
     }
 
-    public function handleRequest(ServerRequestInterface $request): bool
-    {
-        // Check POST.
-        if ($request->getMethod() !== RequestMethodServiceInterface::METHOD_POST) {
-            return false;
-        }
-
-        // Method is POST, set flag.
-        $this->isSent = true;
-
-        // Get post data. This should be an array in these conditions.
-        $parsedBody = $request->getParsedBody();
-        if (!is_array($parsedBody)) {
-            throw new UnexpectedValueException('Data is not an array.');
-        }
-
-        foreach ($this->fields as $formField) {
-            if (array_key_exists($formField->getId(), $parsedBody)) {
-                $formField->setValue((string) $parsedBody[$formField->getId()]);
-                $this->filter($formField);
-            }
-
-            // Validate field.
-            $this->validate($formField);
-        }
-
-        return true;
-    }
-
     public function isSent(): bool
     {
         return $this->isSent;
@@ -94,6 +68,30 @@ final class Form implements FormInterface
     public function isValid(): bool
     {
         return $this->isValid;
+    }
+
+    protected function fieldExists(string $id): bool
+    {
+        foreach ($this->fields as $formField) {
+            if ($formField->getId() === $id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function processForm(): bool
+    {
+        foreach ($this->fields as $formField) {
+            // Filter field.
+            $this->filter($formField);
+
+            // Validate field.
+            $this->validate($formField);
+        }
+
+        return true;
     }
 
     private function filter(FormFieldInterface $formField): bool
