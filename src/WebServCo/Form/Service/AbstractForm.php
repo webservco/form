@@ -14,13 +14,13 @@ abstract class AbstractForm implements FormInterface
 {
     protected bool $isSent = false;
 
+    // Innocent until proven guilty.
+    protected bool $isValid = true;
+
     /**
      * @var array<int,string>
      */
     private array $errorMessages = [];
-
-    // Innocent until proven guilty.
-    private bool $isValid = true;
 
     /**
      * @param array<int,\WebServCo\Form\Contract\FormFieldInterface> $fields
@@ -109,11 +109,6 @@ abstract class AbstractForm implements FormInterface
 
             // Validate field.
             $this->validate($formField);
-        }
-
-        // Set invalid if any errors are present at form level.
-        if ($this->errorMessages !== []) {
-            $this->isValid = false;
         }
 
         return true;
