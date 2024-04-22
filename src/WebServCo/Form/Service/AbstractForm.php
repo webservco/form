@@ -111,6 +111,11 @@ abstract class AbstractForm implements FormInterface
             $this->validate($formField);
         }
 
+        // Set invalid if any errors are present at form level.
+        if ($this->errorMessages !== []) {
+            $this->isValid = false;
+        }
+
         return true;
     }
 

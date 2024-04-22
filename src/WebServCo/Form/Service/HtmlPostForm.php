@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace WebServCo\Form\Service;
 
 use Psr\Http\Message\ServerRequestInterface;
-use UnexpectedValueException;
 use WebServCo\Form\Contract\FormInterface;
 use WebServCo\Http\Contract\Message\Request\Method\RequestMethodServiceInterface;
 
@@ -18,7 +17,8 @@ final class HtmlPostForm extends AbstractForm implements FormInterface
     {
         // Check request method.
         if ($request->getMethod() !== RequestMethodServiceInterface::METHOD_POST) {
-            // Request method doesn't match, stop processing.
+            $this->addErrorMessage('Request method doesn\'t match');
+
             return false;
         }
 
@@ -28,7 +28,9 @@ final class HtmlPostForm extends AbstractForm implements FormInterface
         // Get post data. This should be an array in these conditions.
         $parsedBody = $request->getParsedBody();
         if (!is_array($parsedBody)) {
-            throw new UnexpectedValueException('Data is not an array.');
+            $this->addErrorMessage('Data is not an array.');
+
+            return false;
         }
 
         /**
