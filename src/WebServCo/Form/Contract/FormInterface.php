@@ -8,6 +8,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 interface FormInterface
 {
+    public function addErrorMessage(string $errorMessage): bool;
+
+    /**
+     * @return array<int,string>
+     */
+    public function getErrorMessages(): array;
+
     public function getField(string $id): FormFieldInterface;
 
     /**

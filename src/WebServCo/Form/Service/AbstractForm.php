@@ -14,6 +14,11 @@ abstract class AbstractForm implements FormInterface
 {
     protected bool $isSent = false;
 
+    /**
+     * @var array<int,string>
+     */
+    private array $errorMessages = [];
+
     // Innocent until proven guilty.
     private bool $isValid = true;
 
@@ -24,6 +29,21 @@ abstract class AbstractForm implements FormInterface
      */
     public function __construct(private array $fields, private array $filters, private array $validators)
     {
+    }
+
+    public function addErrorMessage(string $errorMessage): bool
+    {
+        $this->errorMessages[] = $errorMessage;
+
+        return true;
+    }
+
+    /**
+     * @return array<int,string>
+     */
+    public function getErrorMessages(): array
+    {
+        return $this->errorMessages;
     }
 
     public function getField(string $id): FormFieldInterface
