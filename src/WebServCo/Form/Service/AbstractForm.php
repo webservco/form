@@ -6,21 +6,24 @@ namespace WebServCo\Form\Service;
 
 use Fig\Http\Message\StatusCodeInterface;
 use OutOfBoundsException;
+use Psr\Http\Message\ServerRequestInterface;
 use UnexpectedValueException;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormInterface;
 
 abstract class AbstractForm implements FormInterface
 {
-    protected bool $isSent = false;
-
-    // Innocent until proven guilty.
-    protected bool $isValid = true;
-
     /**
      * @var array<int,string>
      */
     private array $errorMessages = [];
+
+    private bool $isSent = false;
+
+    // Innocent until proven guilty.
+    private bool $isValid = true;
+
+    abstract public function handleRequest(ServerRequestInterface $request): bool;
 
     /**
      * @param array<int,\WebServCo\Form\Contract\FormFieldInterface> $fields
@@ -33,6 +36,8 @@ abstract class AbstractForm implements FormInterface
 
     public function addErrorMessage(string $errorMessage): bool
     {
+        $this->setNotValid();
+
         $this->errorMessages[] = $errorMessage;
 
         return true;
@@ -54,7 +59,7 @@ abstract class AbstractForm implements FormInterface
             }
         }
 
-        throw new OutOfBoundsException('Requested field is not defined.');
+        throw new OutOfBoundsException('Requested field not found.');
     }
 
     /**
@@ -90,36 +95,41 @@ abstract class AbstractForm implements FormInterface
         return $this->isValid;
     }
 
-    protected function fieldExists(string $id): bool
+    public function setNotValid(): bool
     {
-        foreach ($this->fields as $formField) {
-            if ($formField->getId() === $id) {
-                return true;
-            }
-        }
+        $this->isValid = false;
 
-        return false;
+        return true;
+    }
+
+    public function setSent(): bool
+    {
+        $this->isSent = true;
+
+        return true;
     }
 
     protected function processForm(): bool
     {
         foreach ($this->fields as $formField) {
             // Filter field.
-            $this->filter($formField);
+            $this->filterField($formField);
 
             // Validate field.
-            $this->validate($formField);
+            $this->validateField($formField);
         }
 
         return true;
     }
 
-    private function filter(FormFieldInterface $formField): bool
+    private function filterField(FormFieldInterface $formField): bool
     {
+        // Apply form level filters.
         foreach ($this->filters as $filter) {
             $formField->setValue($filter->filter($formField->getValue()));
         }
 
+        // Apply field level filters.
         foreach ($formField->getFilters() as $filter) {
             $formField->setValue($filter->filter($formField->getValue()));
         }
@@ -130,37 +140,41 @@ abstract class AbstractForm implements FormInterface
     /**
      * Perform individual field validation.
      */
-    private function validate(FormFieldInterface $formField): bool
+    private function validateField(FormFieldInterface $formField): bool
     {
-        /** Check general validators. */
-        $this->validateGeneral($formField);
+        $this->validateFieldGeneral($formField);
 
-        /** Check individual validators. */
-        $this->validateIndividual($formField);
+        $this->validateFieldIndividual($formField);
 
         return true;
     }
 
-    private function validateGeneral(FormFieldInterface $formField): bool
+    /**
+     * Validate FormField using general validators.
+     */
+    private function validateFieldGeneral(FormFieldInterface $formField): bool
     {
         foreach ($this->validators as $validator) {
             if ($validator->validate($formField)) {
                 continue;
             }
-            $this->isValid = false;
+            $this->setNotValid();
             $formField->addErrorMessage($validator->getErrorMessage());
         }
 
         return true;
     }
 
-    private function validateIndividual(FormFieldInterface $formField): bool
+    /**
+     * Validate FormField using individual validators.
+     */
+    private function validateFieldIndividual(FormFieldInterface $formField): bool
     {
         foreach ($formField->getValidators() as $validator) {
             if ($validator->validate($formField)) {
                 continue;
             }
-            $this->isValid = false;
+            $this->setNotValid();
             $formField->addErrorMessage($validator->getErrorMessage());
         }
 

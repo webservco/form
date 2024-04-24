@@ -17,19 +17,17 @@ final class HtmlPostForm extends AbstractForm implements FormInterface
     {
         // Check request method.
         if ($request->getMethod() !== RequestMethodServiceInterface::METHOD_POST) {
-            $this->isValid = false;
             $this->addErrorMessage('Request method doesn\'t match');
 
             return false;
         }
 
         // Request method matches, set flag.
-        $this->isSent = true;
+        $this->setSent();
 
         // Get post data. This should be an array in these conditions.
         $parsedBody = $request->getParsedBody();
         if (!is_array($parsedBody)) {
-            $this->isValid = false;
             $this->addErrorMessage('Data is not an array.');
 
             return false;

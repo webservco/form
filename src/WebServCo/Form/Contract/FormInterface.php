@@ -32,4 +32,8 @@ interface FormInterface
     public function isSent(): bool;
 
     public function isValid(): bool;
+
+    public function setNotValid(): bool;
+
+    public function setSent(): bool;
 }
