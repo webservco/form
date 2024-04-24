@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service;
 
+use Fig\Http\Message\RequestMethodInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use WebServCo\Form\Contract\FormInterface;
-use WebServCo\Http\Contract\Message\Request\Method\RequestMethodServiceInterface;
 
 use function array_key_exists;
 use function is_array;
@@ -16,7 +16,7 @@ final class HtmlPostForm extends AbstractForm implements FormInterface
     public function handleRequest(ServerRequestInterface $request): bool
     {
         // Check request method.
-        if ($request->getMethod() !== RequestMethodServiceInterface::METHOD_POST) {
+        if ($request->getMethod() !== RequestMethodInterface::METHOD_POST) {
             $this->addErrorMessage('Request method doesn\'t match');
 
             return false;

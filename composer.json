@@ -26,7 +26,8 @@
     "name" : "webservco/form",
     "require": {
         "php" : "^8.2",
-        "webservco/http": "^0"
+        "fig/http-message-util": "^1",
+        "psr/http-message": "^2"
     },
     "require-dev": {
         "pds/skeleton": "^1",
