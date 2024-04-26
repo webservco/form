@@ -165,8 +165,7 @@ abstract class AbstractForm implements FormInterface
             if ($validator->validate($formField)) {
                 continue;
             }
-            $this->setNotValid();
-            $formField->addErrorMessage($validator->getErrorMessage());
+            $this->addFormFieldErrorMessage($validator->getErrorMessage(), $formField);
         }
 
         return true;
@@ -181,8 +180,7 @@ abstract class AbstractForm implements FormInterface
             if ($validator->validate($formField)) {
                 continue;
             }
-            $this->setNotValid();
-            $formField->addErrorMessage($validator->getErrorMessage());
+            $this->addFormFieldErrorMessage($validator->getErrorMessage(), $formField);
         }
 
         return true;
