@@ -11,6 +11,11 @@ interface FormInterface
     public function addErrorMessage(string $errorMessage): bool;
 
     /**
+     * Convenience method to make sure form is also invalidated.
+     */
+    public function addFormFieldErrorMessage(string $errorMessage, FormFieldInterface $formField): bool;
+
+    /**
      * @return array<int,string>
      */
     public function getErrorMessages(): array;

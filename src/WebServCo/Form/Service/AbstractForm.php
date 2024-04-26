@@ -43,6 +43,13 @@ abstract class AbstractForm implements FormInterface
         return true;
     }
 
+    public function addFormFieldErrorMessage(string $errorMessage, FormFieldInterface $formField): bool
+    {
+        $this->setNotValid();
+
+        return $formField->addErrorMessage($errorMessage);
+    }
+
     /**
      * @return array<int,string>
      */
