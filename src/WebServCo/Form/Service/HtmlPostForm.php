@@ -6,6 +6,7 @@ namespace WebServCo\Form\Service;
 
 use Error;
 use Fig\Http\Message\RequestMethodInterface;
+use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use WebServCo\Form\Contract\FormInterface;
 
@@ -18,7 +19,7 @@ final class HtmlPostForm extends AbstractForm implements FormInterface
     {
         // Check request method.
         if ($request->getMethod() !== RequestMethodInterface::METHOD_POST) {
-            $this->addError(new Error('Request method does not match', 400));
+            $this->addError(new Error('Request method does not match', StatusCodeInterface::STATUS_BAD_REQUEST));
 
             return false;
         }
@@ -29,7 +30,7 @@ final class HtmlPostForm extends AbstractForm implements FormInterface
         // Get post data. This should be an array in these conditions.
         $parsedBody = $request->getParsedBody();
         if (!is_array($parsedBody)) {
-            $this->addError(new Error('Data is not an array.', 400));
+            $this->addError(new Error('Data is not an array.', StatusCodeInterface::STATUS_BAD_REQUEST));
 
             return false;
         }
