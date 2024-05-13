@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service;
 
+use Throwable;
 use WebServCo\Form\Contract\FormFieldInterface;
 
 final class FormField implements FormFieldInterface
 {
     /**
-     * @var array<int,string>
+     * @var array<int,\Throwable>
      */
-    private array $errorMessages = [];
+    private array $errors = [];
 
     /**
      * @param array<int,\WebServCo\Form\Contract\FormFilterInterface> $filters
@@ -30,19 +31,19 @@ final class FormField implements FormFieldInterface
     ) {
     }
 
-    public function addErrorMessage(string $errorMessage): bool
+    public function addError(Throwable $error): bool
     {
-        $this->errorMessages[] = $errorMessage;
+        $this->errors[] = $error;
 
         return true;
     }
 
     /**
-     * @return array<int,string>
+     * @return array<int,\Throwable>
      */
-    public function getErrorMessages(): array
+    public function getErrors(): array
     {
-        return $this->errorMessages;
+        return $this->errors;
     }
 
     /**

@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Contract;
 
+use Throwable;
+
 interface FormFieldInterface
 {
-    public function addErrorMessage(string $errorMessage): bool;
+    public function addError(Throwable $error): bool;
 
     /**
-     * @return array<int,string>
+     * @return array<int,\Throwable>
      */
-    public function getErrorMessages(): array;
+    public function getErrors(): array;
 
     /**
      * @return array<int,\WebServCo\Form\Contract\FormFilterInterface>

@@ -4,20 +4,17 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service\Validator;
 
+use Throwable;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormValidatorInterface;
 
 use function mb_strlen;
 
-final class MaximumLengthValidator implements FormValidatorInterface
+final class MaximumLengthValidator extends AbstractValidator implements FormValidatorInterface
 {
-    public function __construct(private string $errorMessage, private int $maximumLength)
+    public function __construct(Throwable $error, private int $maximumLength)
     {
-    }
-
-    public function getErrorMessage(): string
-    {
-        return $this->errorMessage;
+        parent::__construct($error);
     }
 
     public function validate(FormFieldInterface $formField): bool

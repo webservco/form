@@ -7,6 +7,7 @@ namespace WebServCo\Form\Service;
 use Fig\Http\Message\StatusCodeInterface;
 use OutOfBoundsException;
 use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
 use UnexpectedValueException;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormInterface;
@@ -14,9 +15,9 @@ use WebServCo\Form\Contract\FormInterface;
 abstract class AbstractForm implements FormInterface
 {
     /**
-     * @var array<int,string>
+     * @var array<int,\Throwable>
      */
-    private array $errorMessages = [];
+    private array $errors = [];
 
     private bool $isSent = false;
 
@@ -34,28 +35,28 @@ abstract class AbstractForm implements FormInterface
     {
     }
 
-    public function addErrorMessage(string $errorMessage): bool
+    public function addError(Throwable $error): bool
     {
         $this->setNotValid();
 
-        $this->errorMessages[] = $errorMessage;
+        $this->errors[] = $error;
 
         return true;
     }
 
-    public function addFormFieldErrorMessage(string $errorMessage, FormFieldInterface $formField): bool
+    public function addFormFieldErrorMessage(Throwable $error, FormFieldInterface $formField): bool
     {
         $this->setNotValid();
 
-        return $formField->addErrorMessage($errorMessage);
+        return $formField->addError($error);
     }
 
     /**
-     * @return array<int,string>
+     * @return array<int,\Throwable>
      */
-    public function getErrorMessages(): array
+    public function getErrors(): array
     {
-        return $this->errorMessages;
+        return $this->errors;
     }
 
     public function getField(string $id): FormFieldInterface
@@ -165,7 +166,7 @@ abstract class AbstractForm implements FormInterface
             if ($validator->validate($formField)) {
                 continue;
             }
-            $this->addFormFieldErrorMessage($validator->getErrorMessage(), $formField);
+            $this->addFormFieldErrorMessage($validator->getError(), $formField);
         }
 
         return true;
@@ -180,7 +181,7 @@ abstract class AbstractForm implements FormInterface
             if ($validator->validate($formField)) {
                 continue;
             }
-            $this->addFormFieldErrorMessage($validator->getErrorMessage(), $formField);
+            $this->addFormFieldErrorMessage($validator->getError(), $formField);
         }
 
         return true;

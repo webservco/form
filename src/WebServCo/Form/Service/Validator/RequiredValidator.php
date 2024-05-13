@@ -7,17 +7,8 @@ namespace WebServCo\Form\Service\Validator;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormValidatorInterface;
 
-final class RequiredValidator implements FormValidatorInterface
+final class RequiredValidator extends AbstractValidator implements FormValidatorInterface
 {
-    public function __construct(private string $errorMessage)
-    {
-    }
-
-    public function getErrorMessage(): string
-    {
-        return $this->errorMessage;
-    }
-
     public function validate(FormFieldInterface $formField): bool
     {
         if (!$formField->isRequired()) {

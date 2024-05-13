@@ -5,20 +5,21 @@ declare(strict_types=1);
 namespace WebServCo\Form\Contract;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
 
 interface FormInterface
 {
-    public function addErrorMessage(string $errorMessage): bool;
+    public function addError(Throwable $error): bool;
 
     /**
      * Convenience method to make sure form is also invalidated.
      */
-    public function addFormFieldErrorMessage(string $errorMessage, FormFieldInterface $formField): bool;
+    public function addFormFieldErrorMessage(Throwable $error, FormFieldInterface $formField): bool;
 
     /**
-     * @return array<int,string>
+     * @return array<int,\Throwable>
      */
-    public function getErrorMessages(): array;
+    public function getErrors(): array;
 
     public function getField(string $id): FormFieldInterface;
 

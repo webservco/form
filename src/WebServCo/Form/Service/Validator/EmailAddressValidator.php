@@ -11,17 +11,8 @@ use function filter_var;
 
 use const FILTER_VALIDATE_EMAIL;
 
-final class EmailAddressValidator implements FormValidatorInterface
+final class EmailAddressValidator extends AbstractValidator implements FormValidatorInterface
 {
-    public function __construct(private string $errorMessage)
-    {
-    }
-
-    public function getErrorMessage(): string
-    {
-        return $this->errorMessage;
-    }
-
     public function validate(FormFieldInterface $formField): bool
     {
         $value = $formField->getValue();
