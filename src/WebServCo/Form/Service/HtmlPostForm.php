@@ -19,7 +19,13 @@ final class HtmlPostForm extends AbstractForm implements FormInterface
     {
         // Check request method.
         if ($request->getMethod() !== RequestMethodInterface::METHOD_POST) {
-            $this->addError(new Error('Request method does not match', StatusCodeInterface::STATUS_BAD_REQUEST));
+            /**
+             * "405 Method Not Allowed"
+             * "A request method is not supported for the requested resource;
+             * for example, a GET request on a form that requires data to be presented via POST,
+             * or a PUT request on a read-only resource."
+             */
+            $this->addError(new Error('Request method does not match', StatusCodeInterface::STATUS_METHOD_NOT_ALLOWED));
 
             return false;
         }
