@@ -7,6 +7,7 @@ namespace WebServCo\Form\Service;
 use Error;
 use Fig\Http\Message\RequestMethodInterface;
 use Fig\Http\Message\StatusCodeInterface;
+use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormInterface;
@@ -19,6 +20,7 @@ use function strval;
 
 final class HtmlPostForm extends AbstractForm implements FormInterface
 {
+    #[Override]
     public function handleRequest(ServerRequestInterface $request): bool
     {
         // Check request method.

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service\Validator;
 
+use Override;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormValidatorInterface;
 
 final class RequiredValidator extends AbstractValidator implements FormValidatorInterface
 {
+    #[Override]
     public function validate(FormFieldInterface $formField): bool
     {
         if (!$formField->isRequired()) {

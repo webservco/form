@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service\Filter;
 
+use Override;
 use UnexpectedValueException;
 use WebServCo\Form\Contract\FormFilterInterface;
 
@@ -15,6 +16,7 @@ final class NumberFilter implements FormFilterInterface
     /**
      * Remove anything that is not a digit.
      */
+    #[Override]
     public function filter(?string $value): ?string
     {
         if ($value === null) {

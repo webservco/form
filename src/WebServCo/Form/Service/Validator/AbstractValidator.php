@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service\Validator;
 
+use Override;
 use Throwable;
 use WebServCo\Form\Contract\FormValidatorInterface;
 
@@ -13,6 +14,7 @@ abstract class AbstractValidator implements FormValidatorInterface
     {
     }
 
+    #[Override]
     public function getError(): Throwable
     {
         return $this->error;

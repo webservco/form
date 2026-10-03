@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\Form\Service\Validator;
 
+use Override;
 use Throwable;
 use WebServCo\Form\Contract\FormFieldInterface;
 use WebServCo\Form\Contract\FormValidatorInterface;
@@ -17,6 +18,7 @@ final class MaximumLengthValidator extends AbstractValidator implements FormVali
         parent::__construct($error);
     }
 
+    #[Override]
     public function validate(FormFieldInterface $formField): bool
     {
         $value = $formField->getValue();

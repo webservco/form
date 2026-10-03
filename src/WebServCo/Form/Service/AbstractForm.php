@@ -6,6 +6,7 @@ namespace WebServCo\Form\Service;
 
 use Fig\Http\Message\StatusCodeInterface;
 use OutOfBoundsException;
+use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -24,6 +25,7 @@ abstract class AbstractForm implements FormInterface
     // Innocent until proven guilty.
     private bool $isValid = true;
 
+    #[Override]
     abstract public function handleRequest(ServerRequestInterface $request): bool;
 
     /**
@@ -35,6 +37,7 @@ abstract class AbstractForm implements FormInterface
     {
     }
 
+    #[Override]
     public function addError(Throwable $error): bool
     {
         $this->setNotValid();
@@ -44,6 +47,7 @@ abstract class AbstractForm implements FormInterface
         return true;
     }
 
+    #[Override]
     public function addFormFieldErrorMessage(Throwable $error, FormFieldInterface $formField): bool
     {
         $this->setNotValid();
@@ -54,11 +58,13 @@ abstract class AbstractForm implements FormInterface
     /**
      * @return array<int,\Throwable>
      */
+    #[Override]
     public function getErrors(): array
     {
         return $this->errors;
     }
 
+    #[Override]
     public function getField(string $id): FormFieldInterface
     {
         foreach ($this->fields as $formField) {
@@ -73,11 +79,13 @@ abstract class AbstractForm implements FormInterface
     /**
      * @return array<int,\WebServCo\Form\Contract\FormFieldInterface>
      */
+    #[Override]
     public function getFields(): array
     {
         return $this->fields;
     }
 
+    #[Override]
     public function getResponseStatusCode(): int
     {
         if ($this->isSent()) {
@@ -93,16 +101,19 @@ abstract class AbstractForm implements FormInterface
         return StatusCodeInterface::STATUS_OK;
     }
 
+    #[Override]
     public function isSent(): bool
     {
         return $this->isSent;
     }
 
+    #[Override]
     public function isValid(): bool
     {
         return $this->isValid;
     }
 
+    #[Override]
     public function setNotValid(): bool
     {
         $this->isValid = false;
@@ -110,6 +121,7 @@ abstract class AbstractForm implements FormInterface
         return true;
     }
 
+    #[Override]
     public function setSent(): bool
     {
         $this->isSent = true;
