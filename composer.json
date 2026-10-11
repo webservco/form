@@ -20,7 +20,7 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "description" : "A PHP component/library.",
+    "description" : "A PHP component/library. HTML forms with filters and validators, and error messages for both the form and each field.",
     "homepage" : "https://webserv.co",
     "keywords" : [
         "component",
