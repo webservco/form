@@ -90,7 +90,7 @@ Namespaces are relative to `WebServCo\Form\`.
 
 ## Notes
 
-Form-level filters run before the field's own filters, and form-level validators run before the field's own validators. Every field gets all of them, and the length validators skip empty fields that aren't required.
+Form-level filters run before the field's own filters, and form-level validators run before the field's own validators. Every field gets all of them. The length validators skip empty values, required or not: an empty required field fails `RequiredValidator` alone, so use it on every form that has required fields.
 
 A request that isn't POST gets a form error with code 405, and the form isn't marked as sent. An array in the POST data where a field expects a single value is rejected with a form error.
 

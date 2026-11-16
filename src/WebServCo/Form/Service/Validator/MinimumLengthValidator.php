@@ -25,10 +25,10 @@ final class MinimumLengthValidator extends AbstractValidator implements FormVali
 
         if ($value === null || $value === '') {
             /**
-             * Value is not set or empty.
-             * Return true (valid) if field is not required, and false (invalid) is field is required.
+             * Value is not set or empty: no length to check.
+             * A required field is checked by `RequiredValidator`, so that an empty field gets one error, not two.
              */
-            return !$formField->isRequired();
+            return true;
         }
 
         return mb_strlen($value) >= $this->minimumLength;
