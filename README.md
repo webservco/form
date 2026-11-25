@@ -81,7 +81,7 @@ In the template, `$form->getErrors()` has the form errors and `$form->getField('
 | `Contract\FormInterface` | `Service\HtmlPostForm` (extends `Service\AbstractForm`) | Reads POST data, filters and validates every field. |
 | `Contract\FormFieldInterface` | `Service\FormField` | One field: value, settings, filters, validators and errors. |
 | `Contract\FormFilterInterface` | `Service\Filter\TrimFilter`, `StripTagsFilter`, `NumberFilter` | Changes the value before validation. `NumberFilter` keeps only digits. |
-| `Contract\FormValidatorInterface` | `Service\Validator\RequiredValidator`, `MinimumLengthValidator`, `MaximumLengthValidator`, `EmailAddressValidator` | Checks the value and gives back its error when the check fails. |
+| `Contract\FormValidatorInterface` | `Service\Validator\RequiredValidator`, `MinimumLengthValidator`, `MaximumLengthValidator`, `AllowedValuesValidator`, `EmailAddressValidator` | Checks the value and gives back its error when the check fails. `AllowedValuesValidator` takes the list of values (eg. the options of a select). |
 | `Contract\FormFactoryInterface` | your factory | Creates the form. |
 
 Namespaces are relative to `WebServCo\Form\`.
@@ -90,7 +90,7 @@ Namespaces are relative to `WebServCo\Form\`.
 
 ## Notes
 
-Form-level filters run before the field's own filters, and form-level validators run before the field's own validators. Every field gets all of them. The length validators skip empty values, required or not: an empty required field fails `RequiredValidator` alone, so use it on every form that has required fields.
+Form-level filters run before the field's own filters, and form-level validators run before the field's own validators. Every field gets all of them. The length validators and `AllowedValuesValidator` skip empty values, required or not: an empty required field fails `RequiredValidator` alone, so use it on every form that has required fields.
 
 A request that isn't POST gets a form error with code 405, and the form isn't marked as sent. An array in the POST data where a field expects a single value is rejected with a form error.
 
